@@ -4,6 +4,8 @@ from urllib.parse import urlencode, parse_qs, urlparse
 
 import scrapy
 
+from alkoteka import items
+
 
 BASE_URL = 'https://alkoteka.com/web-api/v1/product/'
 BASE_MAIN_URL = 'https://alkoteka.com/catalog/'
@@ -101,7 +103,7 @@ class AlkoSpider(scrapy.Spider):
             prev_price = data.get('prev_price')
             if prev_price:
                 discount = (prev_price - price) / prev_price * 100
-                price_data['sale_tag'] = discount
+                price_data['sale_tag'] = round(discount, 2)
             else:
                 prev_price = price
                 discount = 0
@@ -127,7 +129,7 @@ class AlkoSpider(scrapy.Spider):
             self.logger.error(
                 f'Отсутствует изображение товара: {response.url}'
             )
-        yield {
+        result_data = {
                 'timestamp': datetime.datetime.now().timestamp(),
                 'RPC': data.get('uuid'),
                 'url': response.meta.get('product_url'),
@@ -140,3 +142,4 @@ class AlkoSpider(scrapy.Spider):
                 'metadata': description_dict,
                 'assets': assets_dict
             }
+        yield items.AlkotekaItem(result_data)

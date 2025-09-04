@@ -14,6 +14,7 @@ NEWSPIDER_MODULE = "alkoteka.spiders"
 
 ADDONS = {}
 
+LOG_LEVEL = 'INFO'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "alkoteka (+http://www.yourdomain.com)"
